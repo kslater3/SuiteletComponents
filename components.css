@@ -37,6 +37,6 @@
 .recordtable_data_container {
     height: 20px;
 
-    overflow: hidden;
+    display: inline;
 }
 
