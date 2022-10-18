@@ -5,19 +5,19 @@ class RecordsTable {
         this.table_container.className = 'recordtable_table_container';
 
         root.appendChild(this.table_container);
+
+
+        this.table = document.createElement('table');
+        this.table.className = 'recordtable_table';
+
+        this.table_container.appendChild(this.table);
     }
 
 
-    _build(data) {
-        let table = document.createElement('table');
-        table.className = 'recordtable_table';
-
-        this.table_container.appendChild(table);
-
-
+    _build_header(firstRow) {
         let table_header = document.createElement('tr');
 
-        table.appendChild(table_header);
+        this.table.appendChild(table_header);
 
 
         // Will be used over and over again for Header Cells
@@ -33,7 +33,7 @@ class RecordsTable {
 
 
         // Figure out what the Columns are by looking at the first Record
-        let columns = Object.keys(data[0]);
+        let columns = Object.keys(firstRow);
 
         // Add the Rest of the Columns
         for(let i = 0; i < columns.length; i++) {
@@ -44,17 +44,25 @@ class RecordsTable {
 
             table_header.appendChild(th);
         }
+    }
 
 
+    append(data) {
         // Will be used over and over again for each row of data
-        var td;
         var tr;
+        var td;
         var div;
+
+        var columns = [];
+
+        if(data.length > 0) {
+            columns = Object.keys(data[0]);
+        }
 
 
         for(let i = 0; i < data.length; i++) {
             tr = document.createElement('tr');
-            table.appendChild(tr);
+            this.table.appendChild(tr);
 
 
             // Add the Index
@@ -88,7 +96,7 @@ class RecordsTable {
 
 
     // Depth First Search through the DOMTree removing leaves as you go, lastChild first so that childNodes array doesn't have to shift
-    _remove_children(root) {
+    _recursiveClear(root) {
         while(root.lastChild) {
             this._remove_children(root.lastChild);
 
@@ -96,11 +104,19 @@ class RecordsTable {
         }
     }
 
+    clear() {
+        this._recursiveClear(this.table);
+    }
+
 
     update(data) {
-        this._remove_children(this.table_container);
+        this.clear();
 
-        this._build(data);
+        if(data && data.length > 0) {
+            this._build_header(data[0]);
+        }
+
+        this.append(data);
     }
 }
 
