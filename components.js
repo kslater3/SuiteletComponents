@@ -11,6 +11,8 @@ class RecordsTable {
         this.table.className = 'recordtable_table';
 
         this.table_container.appendChild(this.table);
+
+        this.datalength = 0;
     }
 
 
@@ -71,7 +73,7 @@ class RecordsTable {
                 div = document.createElement('div');
                 div.className = 'recordtable_data_container';
 
-                div.innerHTML = i;
+                div.innerHTML = this.datalength + i + 1;
 
                 tr.appendChild(td);
                 td.appendChild(div);
@@ -91,6 +93,9 @@ class RecordsTable {
                     td.appendChild(div);
                 }
             }
+
+
+            this.datalength += data.length;
         }
     }
 
@@ -106,6 +111,8 @@ class RecordsTable {
 
     clear() {
         this._recursiveClear(this.table);
+
+        this.datalength = 0;
     }
 
 
